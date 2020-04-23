@@ -1,0 +1,63 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+  font-family: "Roboto", "sans-serif";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  color: #d5d0d6;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+ul,
+ol,
+figure,
+button {
+  margin: 0;
+  padding: 0;
+}
+
+button,
+input,
+textarea {
+  &:focus {
+    outline: none;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #323035;
+}
