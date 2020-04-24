@@ -11,221 +11,73 @@
   </form>
 
   <ul class="rooms-list">
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
-
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
-
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
-
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
-
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
-
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
-
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
-
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
-
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
-
-    <li class="item">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
-      <div class="content">
-        <header>
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>16:45 PM</time>
-        </header>
-        <div class="description">
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </div>
-      </div>
-    </li>
+    <ng-container *ngIf="rooms$ | async as rooms">
+      <ng-container *ngIf="activeRoom$ | async as activeRoom">
+        <li
+          class="item"
+          [class.active]="activeRoom.id === room.id"
+          *ngFor="let room of rooms"
+          (click)="changeRoom(room)"
+        >
+          <figure class="logo">
+            <img [src]="room.avatar" />
+          </figure>
+          <div class="content">
+            <header>
+              <strong [title]="room.name">{{ room.name }}</strong>
+              <time>{{ room.lastActivity }}</time>
+            </header>
+            <div class="description">
+              {{ room.description }}
+            </div>
+          </div>
+        </li>
+      </ng-container>
+    </ng-container>
   </ul>
 </section>
 
 <div class="chat">
   <header>
-    <div class="tile">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
+    <ng-container *ngIf="activeRoom$ | async as activeRoom">
+      <div class="tile">
+        <figure class="logo">
+          <img [src]="activeRoom.avatar" />
+        </figure>
 
-      <div class="content">
-        <strong title="Crypto currency - Chat Room"
-          >Crypto currency - Chat Room</strong
-        >
+        <div class="content">
+          <strong [title]="activeRoom.name">{{ activeRoom.name }}</strong>
 
-        <span>
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </span>
+          <span>
+            {{ activeRoom.description }}
+          </span>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </header>
 
   <ul class="messages">
-    <li class="animate-in">
-      <figure class="logo">
-        <img src="assets/Logo.png" />
-      </figure>
+    <ng-container *ngIf="messages$ | async as messages">
+      <li class="animate-in" *ngFor="let message of messages">
+        <figure class="logo">
+          <img [src]="message.author.avatar" />
+        </figure>
 
-      <div class="content">
-        <div class="content-header">
-          <strong title="Crypto currency - Chat Room"
-            >Crypto currency - Chat Room</strong
-          >
-          <time>13 h ago</time>
+        <div class="content">
+          <div class="content-header">
+            <strong
+              >{{ message.author.firstName }}
+              {{ message.author.lastName }}</strong
+            >
+            <time>{{ message.modificationDate }}</time>
+          </div>
+
+          <span>
+            {{ message.content }}
+          </span>
         </div>
-
-        <span>
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-          #Exploration - Grup Chat Messenger - To Do List Integratio
-        </span>
-      </div>
-    </li>
+      </li>
+    </ng-container>
   </ul>
 
   <div class="message-form">

@@ -63,63 +63,78 @@
         }
       }
     }
-  }
 
-  .rooms-list {
-    display: flex;
-    flex-flow: column;
-    overflow-y: auto;
-    padding: 10px 0;
-    height: calc(100vh - 128px);
-
-    .item {
+    .rooms-list {
       display: flex;
-      align-items: center;
-      padding: 0 40px;
-      margin-bottom: 28px;
-      height: 72px;
-      cursor: pointer;
+      flex-flow: column;
+      overflow-y: auto;
+      height: calc(100vh - 128px);
 
-      .logo {
-        width: 62px;
-        height: 62px;
-        flex-shrink: 0;
-        margin-right: 18px;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 16px;
-        }
-      }
-    }
-
-    .content {
-      header {
+      .item {
         display: flex;
-        justify-content: space-between;
-        margin-bottom: 8px;
+        align-items: center;
+        padding: 14px 40px;
+        cursor: pointer;
 
-        strong {
-          max-width: 77%;
-          color: #a19fa2;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        &.active {
+          position: relative;
+          background: #201e23;
+
+          &::before {
+            content: "";
+            position: absolute;
+            height: 100%;
+            top: 0;
+            left: 0;
+            width: 4px;
+            background: #506e8f;
+          }
         }
 
-        time {
-          font-size: 12px;
-          color: #6e6e6e;
-          margin-top: 2px;
+        .logo {
+          width: 62px;
+          height: 62px;
+          flex-shrink: 0;
+          margin-right: 18px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+          }
         }
       }
 
-      .description {
-        font-size: 14px;
-        line-height: 22px;
-        color: #a19fa2;
+      .content {
+        width: calc(100% - 62px - 18px);
+
+        header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 8px;
+
+          strong {
+            width: 100%;
+            color: #a19fa2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 10px;
+          }
+
+          time {
+            font-size: 12px;
+            color: #6e6e6e;
+            margin-top: 2px;
+          }
+        }
+
+        .description {
+          font-size: 14px;
+          line-height: 22px;
+          color: #a19fa2;
+        }
       }
     }
   }
@@ -160,11 +175,7 @@
           flex-flow: column;
 
           strong {
-            max-width: 77%;
             color: #a19fa2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
             margin-bottom: 8px;
           }
 

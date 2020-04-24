@@ -1,15 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ChatStore } from './store/chat.store';
+import { Room } from './models/Room';
+
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
-  styleUrls: ['./chat-page.component.scss']
+  styleUrls: ['./chat-page.component.scss'],
 })
 export class ChatPageComponent implements OnInit {
+  public rooms$ = this.chatStore.rooms$;
 
-  constructor() { }
+  public activeRoom$ = this.chatStore.activeRoom$;
 
-  ngOnInit(): void {
+  public messages$ = this.chatStore.messages$;
+
+  constructor(private chatStore: ChatStore) {}
+
+  ngOnInit() {
+    this.chatStore.fetchRooms();
   }
 
+  public changeRoom = this.chatStore.changeRoom;
 }
