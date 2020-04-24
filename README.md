@@ -115,6 +115,48 @@ Ponizej przykladowy komponent.
 export class ChatPageComponent implements OnInit {}
 ```
 
+## Krok 3 - Implementacja logiki i mockowanie danych
+
+W Angularze logike biznesowa mozemy obsluzyc na wiele sposobow. Dane mozemy pobierac
+bezposrednio w komponentach i przypisywac je do zmiennych, ktore sa `bindowane` z templatka.
+Zmiana wlasciwosci klasy spowoduje naniesienie zmian w widoku. Przy kazde zmianie wlasciwosci
+uruchamiamy proces `ChangeDetection` - uzywamy domyslnego. Pozniej bedzie o `OnPush` i `changeDetectionRef`.
+
+Jednak obsluga calej logiki biznesowej w komponentach niesie za soba pewne ryzyko. Ciezko jest te
+dane wspoldzielic. Dodatkowo przekazywanie ich do komponentow `dzieci` powoduje powstawanie
+nadmiernego kodu. Ciezko tez sledzic przeplyw danych. 
+
+Dlatego do propagowania danych wykorzystuje sie serwisy. Aby zarejestrowac serwis - stworzyc jego instancje
+i umozliwic wstrzykiwanie nalezy dodac go do tablicy `providers` w komponencie badz module. Nalezy pamietac
+zeby serwis oznaczyc dekoratorem `Injectable`.
+
+```ts
+@Injectable()
+export class ChatService {
+  constructor(private http: HttpClient) {}
+
+  public GET = {
+    rooms: () => of(RoomsMock.splice(0, 20)).pipe(delay(1500)),
+    messages: () => of(MessagesMock.splice(0, 5)).pipe(delay(1500)),
+  };
+}
+```
+
+Serwis mozna zarejestrowac tez globalnie - stworzyc jedna instancje dla calej aplikacji `Singleton` poprzez
+uzycie lub dodanie go do `providers` w module glownym aplikacji.
+
+```ts
+@Injectable({ providedIn: "root" })
+```
+
+### Serwis w Angularze, a w rozumieniu ogolnym ?
+
+Otoz w Angularze `serwis` to poprostu skladowa frameworka. Tak jak komponenty, dyrektywy. Jendak w swiecie FE
+przyjelo sie tez ze serwis to poprostu plik w ktorym trzymamy funkcje pozwalajace na wykonanie zapytan. 
+Dlatego stworzylem `chat.service` - ktory odpowiada za wykonywanie zapytan oraz `chat.store` - za logike biznesowa i obsluga zapytan. Plik z serwisem stworzylem w celu pokazania roznicy pomiedzy pojeciami.
+
+W Angularze serwisem jest taka klasa, ktora uzywa dektoratora `Injectable`.
+
 ## Angular i Custom Elements
 
 Angular wykorzystuje mozliwosc tworzenia customowych znacznikow `HTML`. Dzieki temu w dokumencie
