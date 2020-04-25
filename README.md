@@ -243,6 +243,32 @@ Dodalismy do naszego `chat.store` nowy `BehaviourSubject`. Ma to byc strumien tr
 nasze wiadomosci dla aktualnie wybranego chatu. Uzywamy go w komponencie do wyswietlenia danych
 w momencie gdy sie zmienia. Odpowiada za to jak wczesniej pipe `| async`.
 
+## Krok 5 - Dodanie customowego pipe do filtrowania pokoi
+
+Pipe to nic innego jak funkcja, ktora jest wywolywana na danych - przeksztalca je w cos lub
+wywoluje efekty uboczne podczas pojawienia sie nowych. Rozni sie jednak tym, 
+ze mozemy ustawic to w jaki sposob ma reagowac na dane wejsciowe. `Pipe` jest domyslnie 
+`pure`. Oznacza to, ze kod zostanie wywolany wtedy kiedy zmienia sie parametry wejsciowe.
+Referencja w pamieci w przypadku typow zlozonych lub zmiana wartosci dla typow prymitywnych.
+Daje to przewage nad zwykla funkcja napisana w klasie i wywolana w templatce. Mechanism ten
+mozemy wylaczyc
+
+```ts
+@Pipe({ name: 'filterRooms', pure: false })
+```
+
+Pipe wywolujemy w nastepujacy sposob:
+
+```ts
+*ngFor="let room of rooms | filterRooms: roomsSearchPhrase"
+```
+
+Przed iteracja po tablicy `rooms` - zostanie zastosowany filtr. Po znaku `:` przekazujemy kolejno parametry.
+
+[Pipe](https://angular.io/guide/pipes)
+
+
+
 ## Angular i Custom Elements
 
 Angular wykorzystuje mozliwosc tworzenia customowych znacznikow `HTML`. Dzieki temu w dokumencie

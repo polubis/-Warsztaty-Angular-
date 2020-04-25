@@ -67,8 +67,13 @@
     .rooms-list {
       display: flex;
       flex-flow: column;
-      overflow-y: auto;
+      overflow-y: scroll;
       height: calc(100vh - 128px);
+
+      .empty-rooms-message {
+        margin: auto;
+        color: #a19fa2;
+      }
 
       .item {
         display: flex;

@@ -15,6 +15,8 @@ export class ChatPageComponent implements OnInit {
 
   public messages$ = this.chatStore.messages$;
 
+  public roomsSearchPhrase = '';
+
   constructor(private chatStore: ChatStore) {}
 
   ngOnInit() {

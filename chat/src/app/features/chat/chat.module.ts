@@ -5,9 +5,10 @@ import { ChatPageComponent } from './chat-page.component';
 import { ChatRoutingModule } from './chat-routing.module';
 import { ChatService } from './services/chat.service';
 import { ChatStore } from './store/chat.store';
+import { FilterRoomsPipe } from './utils/filter-rooms.pipe';
 
 @NgModule({
-  declarations: [ChatPageComponent],
+  declarations: [ChatPageComponent, FilterRoomsPipe],
   imports: [
     CommonModule,
     ChatRoutingModule
