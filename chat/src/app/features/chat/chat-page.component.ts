@@ -17,6 +17,8 @@ export class ChatPageComponent implements OnInit {
 
   public roomsSearchPhrase = '';
 
+  public chatMessageContent = '';
+
   constructor(private chatStore: ChatStore) {}
 
   ngOnInit() {
@@ -24,4 +26,10 @@ export class ChatPageComponent implements OnInit {
   }
 
   public changeRoom = this.chatStore.changeRoom;
+
+  public addMessage(e: any) {
+    e.preventDefault();
+    this.chatStore.addMessage(this.chatMessageContent);
+    this.chatMessageContent = '';
+  }
 }

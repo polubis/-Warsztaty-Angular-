@@ -48,4 +48,15 @@ export class ChatStore {
     this.activeRoom.next(room);
     this.fetchMessages(room.id).subscribe();
   };
+
+  public addMessage = (content: string) => {
+    this.chatService.POST.message(content)
+      .pipe(
+        tap((message) => {
+          const messages = this.messages.getValue();
+          this.messages.next([...messages, message]);
+        })
+      )
+      .subscribe();
+  };
 }

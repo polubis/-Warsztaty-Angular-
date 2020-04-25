@@ -92,8 +92,12 @@
   </ul>
 
   <div class="message-form">
-    <form>
-      <input placeholder="Type message..." />
+    <form (submit)="addMessage($event)">
+      <input
+        placeholder="Type message..."
+        [value]="chatMessageContent"
+        (input)="chatMessageContent = $event.target.value"
+      />
     </form>
   </div>
 </div>

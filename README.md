@@ -267,7 +267,30 @@ Przed iteracja po tablicy `rooms` - zostanie zastosowany filtr. Po znaku `:` prz
 
 [Pipe](https://angular.io/guide/pipes)
 
+## Krok 6 - Implementacja dodawania wiadomosci do chatu
 
+Cala logika znajduje sie w `chat.store` wiec pomine komponent, w ktorym jedynie przechwytujemy event
+potwierdzenia formularza. Tradycyjnie na samym poczatku wykonujemy zapytanie do zamockowanego API,
+ktore zwraca strumient z 1 wartoscia - nasza odpowiedzia z serwera.
+
+W operatorze `tap` wykonujemy efekty uboczne - modyfikujemy aktualny strumien wiadomosci.
+Za pomoca metody `getValue` pobieramy `snapshot` - czyli ostatnia wartosc ze strumienia.
+I zapisujemy nowa wiadomosc na samym poczatku za pomoca operatora `spread` - `...`.
+Nalezy pamietac, aby dodac zupelnie nowa tablice z wiadomosciami do strumienia. 
+Dzieki temu ulatwimy mechanizmowi `changeDetection` wykrywanie zmian.
+
+```ts
+public addMessage = (content: string) => {
+    this.chatService.POST.message(content)
+      .pipe(
+        tap((message) => {
+          const messages = this.messages.getValue();
+          this.messages.next([...messages, message]);
+        })
+      )
+      .subscribe();
+  };
+```
 
 ## Angular i Custom Elements
 
