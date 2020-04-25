@@ -89,7 +89,7 @@ export class AppRoutingModule {}
 
 [Designy](https://dribbble.com/shots/7075625--Exploration-Grup-Chat-Messenger-To-Do-List-Integration?utm_source=pinterest&utm_campaign=pinterest_shot&utm_content=%23Exploration%20-%20Grup%20Chat%20Messenger%20-%20To%20Do%20List%20Integration&utm_medium=Social_Share)
 
-Tworzenie komponentu: *ng g component features/chat* - stworzy 4 pliki pod scieżka features/chat. Dodatkowo
+Tworzenie komponentu: _ng g component features/chat_ - stworzy 4 pliki pod scieżka features/chat. Dodatkowo
 doda tez stworzony komponent do tablicy `declarations` w `app.module`.
 
 Zawsze przed napisaniem logiki funkcjonalnosci warto przygotowac `layout` czyli to jak
@@ -101,16 +101,16 @@ Pozniej wraz ze wzrostem umiejetnosci warto odrazu dzielic kod na komponenty zeb
 Po napisaniu layotu, podpieciu logiki zawsze przychodzi czas na refactor. W takiej kolejnosci
 powinna byc implementowana kazda funkcjonalnosc w dowolnej aplikacji.
 
-Ponizej przykladowy komponent. 
+Ponizej przykladowy komponent.
 `selector` - definiuje nazwe komponentu, ktorej bedziemy uzywac jezeli chcemy go uzyc.
 `templateUrl` - sciezka do templatki
 `styleUrls` - sciezka do plikow ze stylami
 
 ```ts
 @Component({
-  selector: 'app-chat-page',
-  templateUrl: './chat-page.component.html',
-  styleUrls: ['./chat-page.component.scss']
+  selector: "app-chat-page",
+  templateUrl: "./chat-page.component.html",
+  styleUrls: ["./chat-page.component.scss"],
 })
 export class ChatPageComponent implements OnInit {}
 ```
@@ -124,7 +124,7 @@ uruchamiamy proces `ChangeDetection` - uzywamy domyslnego. Pozniej bedzie o `OnP
 
 Jednak obsluga calej logiki biznesowej w komponentach niesie za soba pewne ryzyko. Ciezko jest te
 dane wspoldzielic. Dodatkowo przekazywanie ich do komponentow `dzieci` powoduje powstawanie
-nadmiernego kodu. Ciezko tez sledzic przeplyw danych. 
+nadmiernego kodu. Ciezko tez sledzic przeplyw danych.
 
 Dlatego do propagowania danych wykorzystuje sie serwisy. Aby zarejestrowac serwis - stworzyc jego instancje
 i umozliwic wstrzykiwanie nalezy dodac go do tablicy `providers` w komponencie badz module. Nalezy pamietac
@@ -152,10 +152,96 @@ uzycie lub dodanie go do `providers` w module glownym aplikacji.
 ### Serwis w Angularze, a w rozumieniu ogolnym ?
 
 Otoz w Angularze `serwis` to poprostu skladowa frameworka. Tak jak komponenty, dyrektywy. Jendak w swiecie FE
-przyjelo sie tez ze serwis to poprostu plik w ktorym trzymamy funkcje pozwalajace na wykonanie zapytan. 
+przyjelo sie tez ze serwis to poprostu plik w ktorym trzymamy funkcje pozwalajace na wykonanie zapytan.
 Dlatego stworzylem `chat.service` - ktory odpowiada za wykonywanie zapytan oraz `chat.store` - za logike biznesowa i obsluga zapytan. Plik z serwisem stworzylem w celu pokazania roznicy pomiedzy pojeciami.
 
 W Angularze serwisem jest taka klasa, ktora uzywa dektoratora `Injectable`.
+
+### RxJs
+
+Angular wykorzystuje biblioteke RxJs w wielu miejscach. Ma ona za zadanie ulatwic obsluge asynchronicznego
+kodu oraz zdarzen w przegladarce. Zamiast wywolywac `Promise.then` w Angularze uzywa sie `subscribe`.
+
+RxJs to bardzo szeroki temat i jedna z najtrudniejszych bibliotek wedlug rankingow. Trzeba przestawic myslenie.
+
+RxJs implementuje wzorzec obserwatora z kilkoma modyfikacjami - nie trzyma listy `subskrybentow`.
+
+Jak dziala ?
+
+Idea jest dosyc prosta. Wyobraz sobie przycisk `subscribe` w serwisie `Youtube`. Jezeli chcesz otrzymywac
+notyfikacje to klikasz przycisk, a jezeli nie to wylaczasz `subskrypcje`. Analogicznie zaimplementowany jest
+RxJs.
+
+Mamy `Observable` czyli obiekt obserwowany - analogia do autora na `yt` oraz `subscribe` - analogia do przycisku.
+`Observable` to strumien danych. Moze byc to cokolwiek. Tablica `string`, `number`, itp.
+`Observable` emituje wartosci tylko wtedy gdy podlaczymy sie do strumienia `subscribe`. Po podlaczeniu sie
+zostaje zwrocona `Subscription` - mozemy anulowac w dowolnym momencie wykonywany kod. Zeby odlaczyc sie
+od dostawania "powiadomien" nalezy wywolac metode `unsubscribe`.
+
+`Observable` stworzony np z eventu za pomoca `fromEvent()` - jest `cold`. Oznacza to tyle, ze zaczyna on emitowac
+wartosci tylko i wylacznie po podlaczeniu. Kazdy kolejny subskrybent nie bedzie posiadal dostepu
+do wyemitowanych wczesniej wartosci.
+
+`BehaviourSubject, Subject, ReplaySubject` sa `hot`. Oznacza to tyle, ze strumien jest wspoldzielony dla kazdego
+subskrybenta. Dzieki temu kazdy posiada dostep do tych samych danych wewnatrz strumienia. `Hot` mowi tez o tym,
+ze mozemy do tego strumienia dodawac dane oraz je odbierac czego nie mozemy robic w przypadku chociazby `fromEvent` czy stworzonego za pomoca operatora `of`.
+
+Mozemy przeksztalcic `Observable` z `cold` na `hot` za pomoca operatorow `share, shareReplay`. Wtedy
+kazdy kolejny subskrybent bedzie korzystal z tego samego strumienia co 1.
+
+Potega RxJs tkwi w `operatorach`. Mozemy je dorzucac do metody `pipe`. Operatory pozwalaja
+na definiowanie tego co ma sie dziac ze strumieniem podczas otrzymywania nowych danych wewnatrz.
+
+Przyklad:
+
+```ts
+public fetchRooms = () => {
+    // Zapytanie do API - dopoki nie wywolamy subscribe - nic sie nie stanie
+    this.chatService.GET.rooms()
+      .pipe(
+        tap((rooms) => {
+          // Operator tap powinien byc uzywany do obslugi Side Effects
+          // W tym przypadku po otrzymaniu odpowiedzi z API - ustawia dane
+          const room = !!rooms.length ? rooms[0] : null;
+          // .next jest to metoda udostepniona przez Subjecty. Pozwala wemitowac nowe dane do strumienia
+          // kazdy subskrybent dostanie je
+          this.rooms.next(rooms);
+          this.activeRoom.next(room);
+        }),
+        // Filter pozwala zablokowac dalszy kod. Oznacza to tyle, ze
+        // jezeli dlugosc listy pokoi bedzie rowna 0 - to nie powinnismy strzelac po wiadomosci
+        filter(({ length }) => !!length),
+        // Pozwala zmapowac wartosc strumienia na kolejny observable
+        // Moglibsmy zrobic zagniezdzenie jak przypadku callbackow czy promises,
+        // ale w RxJs jest to antypattern. Nie mozemy zagniezdzac subscribe.
+        // Do tego mamy specjalne operatory
+        mergeMap((rooms) => this.fetchMessages(rooms[0].id))
+      )
+      .subscribe();
+};
+```
+
+Jak pewnie widac wyzej uzylem `mergeMap` do wykonania zapytania do `API`. `mergeMap` pozwala na
+uzycie metody `subscribe` za Ciebie. Dziala to w ten sposob.
+
+1. Pobralismy liste pokoi.
+2. Doszlismy do operatora `mergeMap` - wywolal on metode `subscribe` i wykonalismy zapytanie do API.
+
+Mamy jeszcze kilka innych operatorow mapowania strumienia na inny strumien.
+`switchMap` - jezeli zostanie wyemitowana wartosc ze sturmienia nadrzednego - nowa, a aktualnie
+trwa emisja danych (np strzal do API) - to wtedy zostanie ona porzucona i podlaczymy sie do nowej.
+Przyklad - uzytkownik zmienia filtry w aplikacji. 1 zmiana trwa 10s nastepnie zmienil zdanie. Kliknal
+na kolejne filtry, ale te przyszly przed wczesniejszymi. Normalnie bez tego operatora zobaczylibysmy nowe filtry i nagle zmiane na stare. Dzieki RxJs podczas zmiany filtrow - przestajemy brac pod uwage stara odpowiedz.
+Odlaczamy sie od niej.
+
+[Jak dzialaja operatory - wyjasnione wizualnie](https://rxmarbles.com/)
+[Szczegolowy kurs](https://rxjs-dev.firebaseapp.com/guide/overview)
+
+## Krok 4 - Dodanie obslugi pobierania wiadomosci
+
+Dodalismy do naszego `chat.store` nowy `BehaviourSubject`. Ma to byc strumien trzymajacy
+nasze wiadomosci dla aktualnie wybranego chatu. Uzywamy go w komponencie do wyswietlenia danych
+w momencie gdy sie zmienia. Odpowiada za to jak wczesniej pipe `| async`.
 
 ## Angular i Custom Elements
 

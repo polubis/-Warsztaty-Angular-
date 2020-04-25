@@ -12,6 +12,6 @@ export class ChatService {
 
   public GET = {
     rooms: () => of(RoomsMock.splice(0, 20)).pipe(delay(1500)),
-    messages: () => of(MessagesMock.splice(0, 5)).pipe(delay(1500)),
+    messages: (roomId: number) => of(MessagesMock).pipe(delay(1500)),
   };
 }
