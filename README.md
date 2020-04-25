@@ -292,6 +292,15 @@ public addMessage = (content: string) => {
   };
 ```
 
+## Krok 7 - dodanie backendu w NodeJs oraz polaczenie z endpointami
+
+Dodalem solucje backendowa w tym samym repo. Node JS + express + Ts. Potrzebujemy backendu do
+zarzadzania polaczeniami za pomoca `websocketow`. Jest to taki typ polaczenia, ktory w czasie
+rzeczywistym pozwala na odbior oraz wyslanie zdarzen pomiedzy klientem, a serwerem. 
+
+Narazie jednak sa to same endpointy, ktore zwracaja te same zamockowane dane co wczesniej. Jednak
+jest to juz obsluzone poprzez serwer.
+
 ## Angular i Custom Elements
 
 Angular wykorzystuje mozliwosc tworzenia customowych znacznikow `HTML`. Dzieki temu w dokumencie

@@ -5,12 +5,19 @@
   grid-template-areas: "rooms chat";
 
   .animate-in {
-    animation: 0.3s animate-in ease-in-out forwards;
+    opacity: 0;
+    animation: 0.3s animate-in ease-in forwards;
+
+    @for $i from 1 through 6 {
+      &:nth-child(#{$i}n) {
+        animation-delay: #{$i * 0.08}s;
+      }
+    }
 
     @keyframes animate-in {
       from {
         opacity: 0;
-        transform: translateY(-15px);
+        transform: translateY(-12px);
       }
       to {
         opacity: 1;

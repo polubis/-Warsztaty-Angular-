@@ -1,22 +1,35 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 
-import { RoomsMock } from 'src/mocks/RoomsMock';
 import { MessagesMock } from 'src/mocks/MessagesMock';
+
+import { environment } from 'src/environments/environment';
+import { Room } from '../models/Room';
+import { Message } from '../models/Message';
 
 @Injectable()
 export class ChatService {
   constructor(private http: HttpClient) {}
 
   public GET = {
-    rooms: () => of(RoomsMock.splice(0, 20)).pipe(delay(1500)),
-    messages: (roomId: number) => of(MessagesMock).pipe(delay(1500)),
+    rooms: () =>
+      this.http
+        .get<{ data: Room[] }>(`${environment.api}/chat/rooms`)
+        .pipe(map((r) => r.data)),
+    messages: (roomId: number) =>
+      this.http
+        .get<{ data: Message[] }>(`${environment.api}/chat/messages`)
+        .pipe(map((r) => r.data)),
   };
 
   public POST = {
     message: (content: string) =>
-      of({ ...MessagesMock[0], content }).pipe(delay(1500)),
+      this.http
+        .post<{ data: Message }>(`${environment.api}/chat/messages`, {
+          content,
+        })
+        .pipe(map((r) => r.data)),
   };
 }
