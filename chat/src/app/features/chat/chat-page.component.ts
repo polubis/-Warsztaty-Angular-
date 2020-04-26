@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ChatStore } from './store/chat.store';
-import { Room } from './models/Room';
 
 @Component({
   selector: 'app-chat-page',

@@ -13,6 +13,11 @@ import { Message } from '../models/Message';
 export class ChatService {
   constructor(private http: HttpClient) {}
 
+  public WEBSOCKET = {
+    connect: (userId: number) =>
+      new WebSocket(`${environment.websocket}?userId=${userId}`),
+  };
+
   public GET = {
     rooms: () =>
       this.http
@@ -25,9 +30,9 @@ export class ChatService {
   };
 
   public POST = {
-    message: (content: string) =>
+    message: (content: string, roomId: number) =>
       this.http
-        .post<{ data: Message }>(`${environment.api}/chat/messages`, {
+        .post<{ data: Message }>(`${environment.api}/chat/messages/${roomId}`, {
           content,
         })
         .pipe(map((r) => r.data)),

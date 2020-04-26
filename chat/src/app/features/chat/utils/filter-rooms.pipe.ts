@@ -12,7 +12,6 @@ export class FilterRoomsPipe implements PipeTransform {
    * @returns Filtered rooms
    */
   transform(rooms: Room[], phrase: string): Room[] {
-      console.log(rooms, phrase);
     return rooms.filter((room) => room.name.toLowerCase().includes(phrase));
   }
 }

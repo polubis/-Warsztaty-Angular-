@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 
 import { parseSuccess, Forbidden, Unauthorized, BadRequest } from "../utils";
+import { chatService } from "../services";
 
 const chatController = express.Router();
 
@@ -228,9 +229,9 @@ chatController.get(
 );
 
 chatController.post(
-  "/messages",
+  "/messages/:roomId",
   async (req: Request, res: Response, next: NextFunction) => {
-    parseSuccess(req, res, {
+    const message = {
       id: 4,
       author: {
         id: 4,
@@ -241,7 +242,11 @@ chatController.post(
 
       modificationDate: "2/23/2020",
       content: req.body.content,
-    });
+    };
+
+    chatService.sendMessage(+req.params.roomId, message);
+
+    parseSuccess(req, res, message);
   }
 );
 
